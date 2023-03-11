@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Birke\ThumbnailCreator;
 
 use Birke\ThumbnailCreator\Response\FailureResponse;
+use Birke\ThumbnailCreator\Response\FileExistsResponse;
 use Birke\ThumbnailCreator\Response\PathTraversalResponse;
 use Birke\ThumbnailCreator\Response\SourceNotFoundResponse;
 use Birke\ThumbnailCreator\Response\SuccessResponse;
@@ -24,6 +25,11 @@ class ThumbnailController {
 		if ( !( $response instanceof SuccessResponse ) ) {
 			return new Response($response->message, $this->getResponseCode($response), ['content-type' => 'text/plain'] );
 		}
+
+		if ( $response instanceof FileExistsResponse ) {
+			error_log("Got request for existing file, check your web server configuration.");
+		}
+
 		BinaryFileResponse::trustXSendfileTypeHeader();
 		$httpResponse = new BinaryFileResponse($response->path);
 		$httpResponse->prepare($request);

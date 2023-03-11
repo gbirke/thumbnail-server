@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Birke\ThumbnailCreator;
 
 use Birke\ThumbnailCreator\Response\FailureResponse;
+use Birke\ThumbnailCreator\Response\FileExistsResponse;
 use Birke\ThumbnailCreator\Response\PathTraversalResponse;
 use Birke\ThumbnailCreator\Response\SourceNotFoundResponse;
 use Birke\ThumbnailCreator\Response\SuccessResponse;
@@ -35,6 +36,11 @@ class ThumbnailCreator {
 		}
 	
 		$destinationName = $this->joinPaths( $this->thumbnailDir, $subPath, $pathInfo['basename'] );
+
+		if (file_exists($destinationName)) {
+			return new FileExistsResponse($destinationName);
+		}
+
 		$this->createOutputDirectoryIfNeeded($destinationName);
 
 		$command = "convert -density 72 \"{$sourceName}[0]\" -colorspace sRGB \"{$destinationName}\"";
