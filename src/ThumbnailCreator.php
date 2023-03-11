@@ -14,7 +14,6 @@ class ThumbnailCreator {
 	public function __construct(
 		private readonly string $sourceDir,
 		private readonly string $thumbnailDir,
-		private readonly string $thumbnailPrefix
 	) {}
 
 	public function createThumbnail(string $path): SuccessResponse|FailureResponse {
@@ -24,9 +23,7 @@ class ThumbnailCreator {
 			return new UnsupportedOutputTypeResponse( $pathInfo['extension'], 'jpg' );
 		}
 
-		$subPath = str_replace($this->thumbnailPrefix, '', $pathInfo['dirname']);
-
-		$sourceName = $this->joinPaths( $this->sourceDir, $subPath, $pathInfo['filename'] );
+		$sourceName = $this->joinPaths( $this->sourceDir, $pathInfo['dirname'], $pathInfo['filename'] );
 
 		if ( !file_exists($sourceName)) {
 			return new SourceNotFoundResponse($sourceName);
@@ -35,7 +32,7 @@ class ThumbnailCreator {
 			return new PathTraversalResponse($sourceName);
 		}
 	
-		$destinationName = $this->joinPaths( $this->thumbnailDir, $subPath, $pathInfo['basename'] );
+		$destinationName = $this->joinPaths( $this->thumbnailDir, $pathInfo['dirname'], $pathInfo['basename'] );
 
 		if (file_exists($destinationName)) {
 			return new FileExistsResponse($destinationName);

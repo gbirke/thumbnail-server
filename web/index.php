@@ -12,8 +12,8 @@ $controller = new ThumbnailController(
 	new ThumbnailCreator(
 		sourceDir: '/pdfs',
 		thumbnailDir: '/thumbnails',
-		thumbnailPrefix: '/thumbnails/'
-	)
+	),
+	'/thumbnails'
 );
 $response = $controller->index($request);
 

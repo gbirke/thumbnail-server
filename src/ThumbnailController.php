@@ -14,12 +14,17 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ThumbnailController {
 	public function __construct(
-		private readonly ThumbnailCreator $thumbnailCreator
+		private readonly ThumbnailCreator $thumbnailCreator,
+		private readonly string $urlPrefix = ''
 	) {}
 
 	public function index(Request $request): Response {
 		$path = urldecode($request->getPathInfo());
-		
+
+		if ($this->urlPrefix && str_starts_with($path, $this->urlPrefix)) {
+			$path = substr($path, strlen($this->urlPrefix));
+		}
+
 		$response = $this->thumbnailCreator->createThumbnail($path);
 
 		if ( !( $response instanceof SuccessResponse ) ) {
