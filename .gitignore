@@ -1,0 +1,10 @@
+### Composer
+composer.phar
+/vendor/
+
+### Ignore secrets
+.env
+
+### Ignore generated thumbnails
+example/thumbnails
+

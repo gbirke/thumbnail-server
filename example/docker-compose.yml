@@ -1,0 +1,26 @@
+version: '2'
+
+# Bring up a dev environment
+
+services:
+    web:
+        image: nginx:alpine
+        ports:
+            - "8045:8045"
+        volumes:
+            - ./site.template:/etc/nginx/conf.d/site.template
+            - ..:/app
+            - ./html:/var/www/html
+            - ./thumbnails:/thumbnails:ro
+        environment:
+          - NGINX_PORT="8045"
+        command: /bin/sh -c "envsubst '$$NGINX_PORT' < /etc/nginx/conf.d/site.template > /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'"
+    php:
+        build: .
+        volumes:
+            - ..:/app
+            - ./thumbnails:/thumbnails
+            - ./pdfs:/pdfs:ro
+            - ./php-fpm-logging.conf:/usr/local/etc/php-fpm.d/zz-logging.conf
+
+

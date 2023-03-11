@@ -1,0 +1,18 @@
+{
+    "name": "birke/thumbnail-creator",
+    "require": {
+        "symfony/http-foundation": "^6.2"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Birke\\ThumbnailCreator\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Gabriel Birke",
+            "email": "gb@birke-sofware.de"
+        }
+    ]
+}

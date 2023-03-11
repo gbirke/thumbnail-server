@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Thumbnail example</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<style>
+		.image-container {
+			display: flex;
+			flex-wrap: wrap;
+		}
+		.image {
+			max-width: 250px;		
+			max-height: 250px;
+			border: solid 1px lightblue;
+			display: flex;
+			justify-content: center;
+			background: lightblue;
+			margin: 5px;
+			padding: 5px;
+			border-radius: 5px;
+		}
+		.image img {
+			max-width: 100%;		
+			max-height: 100%;
+			object-fit: contain;
+		}
+	</style>
+</head>
+
+<body>
+	<main>
+		<h1>Thumbnail example</h1>
+		<p>The following examples show generated and cached thumbnails:</p>
+		<div class="image-container">
+			<div class="image">
+				<img src="/thumbnails/docs/Memoirs%20of%20a%20ChatBot.pdf.jpg"
+					alt="Thumbnail for 'Memoirs of a ChatBot.pdf'" />
+			</div>
+			<div class="image">
+				<img src="/thumbnails/Presentations/DNA%20Presentation.pdf.jpg"
+					alt="Thumbnail for 'DNA Presentation.pdf'" />
+			</div>
+			<div class="image">
+				<img src="/thumbnails/Presentations/Candy_Template.pdf.jpg"
+					alt="Thumbnail for 'Candy_Template.pdf'" />
+			</div>
+		</div>
+	</main>
+</body>
+
+</html>

@@ -1,0 +1,24 @@
+server {
+    listen ${NGINX_PORT};
+    server_name localhost;
+    error_log  /var/log/nginx/error.log;
+    access_log /var/log/nginx/access.log;
+	root /var/www/html;
+
+    location /thumbnails/ {
+        alias /thumbnails/;
+        try_files $uri @thumbnails;
+    }
+
+    location @thumbnails {
+        root /app/web;
+        fastcgi_pass php:9000;
+        fastcgi_index index.php;
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME ${document_root}/index.php;
+        fastcgi_param PATH_INFO $fastcgi_path_info;
+        fastcgi_param HTTPS off;
+    }
+}
+
+# vim: ft=nginx
