@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Birke\ThumbnailCreator;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class ThumbnailController {
@@ -12,6 +13,16 @@ class ThumbnailController {
 		private readonly string $thumbnailDir,
 		private readonly string $thumbnailPrefix
 	) {}
+
+	public function index(Request $request): Response {
+		if ($request->query->has('thumbnail_created')) {
+			return new Response('Error - Can\'t create thumbnails twice', Response::HTTP_BAD_REQUEST, ['content-type' => 'text/plain'] );
+		}
+
+		$path = urldecode($request->getPathInfo());
+		
+		return $this->createThumbnail($path);
+	}
 
 	private function joinPaths(string ...$parts): string {
 		if (count($parts) === 0) return '';
