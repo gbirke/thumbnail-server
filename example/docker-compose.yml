@@ -22,5 +22,9 @@ services:
             - ./thumbnails:/thumbnails
             - ./pdfs:/pdfs:ro
             - ./php-fpm-logging.conf:/usr/local/etc/php-fpm.d/zz-logging.conf
+        environment:
+          - THUMBNAIL_PATH=/thumbnails
+          - SOURCE_PATH=/pdfs
+          - URL_PREFIX=/thumbnails
 
 
