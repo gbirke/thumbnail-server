@@ -6,7 +6,7 @@ namespace Birke\ThumbnailCreator;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-class ThumbnailCreator {
+class ThumbnailController {
 	public function __construct(
 		private readonly string $sourceDir,
 		private readonly string $thumbnailDir,

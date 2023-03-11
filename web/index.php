@@ -2,7 +2,7 @@
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Birke\ThumbnailCreator\ThumbnailCreator;
+use Birke\ThumbnailCreator\ThumbnailController;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -17,7 +17,7 @@ if ($request->query->has('thumbnail_created')) {
 }
 $path = urldecode($request->getPathInfo());
 
-$thumbnailer = new ThumbnailCreator(
+$thumbnailer = new ThumbnailController(
 	sourceDir: '/pdfs',
 	thumbnailDir: '/thumbnails',
 	thumbnailPrefix: '/thumbnails/'
