@@ -7,7 +7,7 @@ use Birke\ThumbnailCreator\Response\FailureResponse;
 use Birke\ThumbnailCreator\Response\PathTraversalResponse;
 use Birke\ThumbnailCreator\Response\SourceNotFoundResponse;
 use Birke\ThumbnailCreator\Response\SuccessResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -17,20 +17,17 @@ class ThumbnailController {
 	) {}
 
 	public function index(Request $request): Response {
-		if ($request->query->has('thumbnail_created')) {
-			return new Response('Error - Can\'t create thumbnails twice', Response::HTTP_BAD_REQUEST, ['content-type' => 'text/plain'] );
-		}
-
 		$path = urldecode($request->getPathInfo());
 		
 		$response = $this->thumbnailCreator->createThumbnail($path);
 
-		if ( $response instanceof SuccessResponse ) {
-			// TODO pass through instead of redirect
-			return new RedirectResponse($path . "?thumbnail_created=1");
-		} else {
+		if ( !( $response instanceof SuccessResponse ) ) {
 			return new Response($response->message, $this->getResponseCode($response), ['content-type' => 'text/plain'] );
 		}
+		BinaryFileResponse::trustXSendfileTypeHeader();
+		$httpResponse = new BinaryFileResponse($response->path);
+		$httpResponse->prepare($request);
+		return $httpResponse;
 	}
 
 	private function getResponseCode(FailureResponse $response): int {

@@ -18,6 +18,10 @@ server {
         fastcgi_param SCRIPT_FILENAME ${document_root}/index.php;
         fastcgi_param PATH_INFO $fastcgi_path_info;
         fastcgi_param HTTPS off;
+		fastcgi_param HTTP_X_SENDFILE_TYPE x-accel-redirect;
+		# The mapping will activate sendfile for Symfony BinaryFileResponse
+		# Usually it maps protected paths to URL paths, but here the path stays the same
+		fastcgi_param HTTP_X-Accel-Mapping    /thumbnails/=/thumbnails/;
     }
 }
 
