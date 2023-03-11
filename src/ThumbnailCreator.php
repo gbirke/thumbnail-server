@@ -16,19 +16,6 @@ class ThumbnailCreator {
 		private readonly string $thumbnailPrefix
 	) {}
 
-	private function joinPaths(string ...$parts): string {
-		if (count($parts) === 0) return '';
-
-		$prefix = ($parts[0] === DIRECTORY_SEPARATOR) ? DIRECTORY_SEPARATOR : '';
-		$processed = array_filter(array_map(function ($part) {
-			return rtrim($part, DIRECTORY_SEPARATOR);
-		}, $parts), function ($part) {
-			return !empty($part);
-		});
-
-		return $prefix . implode(DIRECTORY_SEPARATOR, $processed);
-	}
-
 	public function createThumbnail(string $path): SuccessResponse|FailureResponse {
 		$pathInfo = pathinfo($path);
 			
@@ -50,13 +37,24 @@ class ThumbnailCreator {
 		$destinationName = $this->joinPaths( $this->thumbnailDir, $subPath, $pathInfo['basename'] );
 		$this->createOutputDirectoryIfNeeded($destinationName);
 
-		// TODO limit width to 400px (to allow for hi-dpi display of 200px thumbnails)
-
 		$command = "convert -density 72 \"{$sourceName}[0]\" -colorspace sRGB \"{$destinationName}\"";
 
 		// TODO capture output and check for return code, logging if command is not successful
 		exec($command);
 		return new SuccessResponse($destinationName);
+	}
+
+	private function joinPaths(string ...$parts): string {
+		if (count($parts) === 0) return '';
+
+		$prefix = ($parts[0] === DIRECTORY_SEPARATOR) ? DIRECTORY_SEPARATOR : '';
+		$processed = array_filter(array_map(function ($part) {
+			return rtrim($part, DIRECTORY_SEPARATOR);
+		}, $parts), function ($part) {
+			return !empty($part);
+		});
+
+		return $prefix . implode(DIRECTORY_SEPARATOR, $processed);
 	}
 
 	private function pathHasTraversal(string $sourceName): bool {
