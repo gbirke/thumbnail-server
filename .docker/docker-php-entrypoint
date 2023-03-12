@@ -1,0 +1,17 @@
+#!/bin/sh
+set -e
+
+# enable setting www-data uid at runtime and thumbnail path available for writing
+if [ "$UID" != "" ]; then
+	usermod -u $UID www-data
+	if [ "$THUMBNAIL_PATH" != "" ] && [ -d "$THUMBNAIL_PATH" ]; then
+		chown www-data $THUMBNAIL_PATH
+	fi
+fi
+
+# first arg is `-f` or `--some-option`
+if [ "${1#-}" != "$1" ]; then
+        set -- php-fpm "$@"
+fi
+
+exec "$@"
